@@ -68,7 +68,7 @@ ds_col <- "#A62F03"
 ww_col <- "#045CB4"
 
 # storing a ggplot theme (that will be used for all ggplots)
-theme_set(theme_bw())
+theme_set(theme_bw()) # will be used for all future plots
 ```
 
 
@@ -79,11 +79,11 @@ Data source: Valliere, Justin; Zhang, Jacqueline; Sharifi, M.; Rundel, Philip (2
 ```{r}
 #| label: data cleaning
 
-# 
-drought_exp_clean <- drought_exp 
-  # 
-  clean_names() 
-  # 
+# storing data as a new objects (creating new object from original frame)
+drought_exp_clean <- drought_exp |> 
+  # cleaning column names (making them lowercase with underscore)
+  clean_names() |> 
+  # creating new columns to store binomial species name 
   mutate(species_name = case_match(
     species,
     "ENCCAL" ~ "Encelia californica", # bush sunflower
@@ -93,14 +93,14 @@ drought_exp_clean <- drought_exp
     "SALLEU" ~ "Salvia leucophylla", # purple sage
     "STIPUL" ~ "Stipa pulchra", # purple needlegrass
     "LOTSCO" ~ "Lotus scoparius" # deerweed
-  )) 
-  # 
+  )) |> 
+  # creating new columns with full water treatment name
   mutate(water_treatment = case_match(
     water,
     "WW" ~ "Well watered",
     "DS" ~ "Drought stressed"
-  ))  
-  # 
+  ))  |> 
+  # reordering species level, lotus scoparius as our reference 
   mutate(species_name = as_factor(species_name),
          species_name = fct_relevel(species_name,
                                     "Lotus scoparius",
@@ -109,25 +109,33 @@ drought_exp_clean <- drought_exp
                                     "Encelia californica",
                                     "Stipa pulchra",
                                     "Eschscholzia californica",
-                                    "Grindelia camporum")) 
+                                    "Grindelia camporum")) |> 
+  # reordering water treatment levels 
   mutate(water_treatment = as_factor(water_treatment),
          water_treatment = fct_relevel(water_treatment,
                                        "Drought stressed",
-                                       "Well watered")) 
-  #
+                                       "Well watered")) |> 
+  # selecting columns of interest to display 
   select(species_name, water_treatment, sla, total_g)
 ```
 
 Insert code to double check the structure of the data frame here.  
+```{r}
+#| label: checking-structure 
 
+str(drought_exp_clean)
 
-
+```
 
 Insert code to display 10 random rows from the data frame here.  
 
+```{r}
+#| label: 10-rows
 
-
-
+slice_sample(
+  drought_exp_clean, # data frame to display 
+  n = 10) # selecting 10 rows of data to display 
+```
 
 # 3. Visualizing data
 
