@@ -17,7 +17,7 @@ In this workshop, we will answer the question: How do specific leaf area, water 
 
 **Water treatment** is a categorical variable (i.e. a *factor*) with 2 levels: drought stressed (DS) and well watered (WW).  
 
-**Species** is a categorical variable (again, a *factor*) with 6 levels.  
+**Species** is a categorical variable (again, a *factor*) with 7 levels.  
 
 | Species name                 | Species code | Common name        |
 |------------------------------|--------------|--------------------|
@@ -44,8 +44,10 @@ library(ggeffects) # getting model predictions
 library(MuMIn) # model selection
 
 # read in your data here
-
-
+drought_exp <- read_xlsx(
+  here("data", "Valliere_etal_EcoApps_Data.xlsx"),
+  sheet = "First Harvest"
+)
 
 ```
 
